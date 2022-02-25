@@ -85,10 +85,11 @@ def page(request, queryset, *, page=None, page_size=None, max_page_size=None, ma
     )
     data = []
     for item in paginator_page:
-        items = dict()
-        for field in fields:
-            items.setdefault(field, getattr(item, field))
-        data.append(items)
+        if isinstance(item, Model):
+            items = dict()
+            for field in fields:
+                items.setdefault(field, getattr(item, field))
+            data.append(items)
 
     return ok(data=data, pagination=pagination)
 
